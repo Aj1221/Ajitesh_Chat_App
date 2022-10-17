@@ -6,10 +6,12 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigate, Link } from "react-router-dom";
 
+
 const Register = () => {
   const [err, setErr] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
 
   const handleSubmit = async (e) => {
     setLoading(true);
@@ -22,7 +24,6 @@ const Register = () => {
     try {
       //Create user
       const res = await createUserWithEmailAndPassword(auth, email, password);
-      console.log("res",res)
 
       //Create a unique image name
       const date = new Date().getTime();
@@ -47,8 +48,8 @@ const Register = () => {
             //create empty user chats on firestore
             await setDoc(doc(db, "userChats", res.user.uid), {});
             navigate("/");
+            window.location.reload()
           } catch (err) {
-            console.log("err1",err);
             alert(err)
             setErr(true);
             setLoading(false);
@@ -56,7 +57,6 @@ const Register = () => {
         });
       });
     } catch (err) {
-      console.log("err2",err);
       alert(err)
       setErr(true);
       setLoading(false);
